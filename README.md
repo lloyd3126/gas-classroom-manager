@@ -47,7 +47,7 @@ README.md
 
 ## 功能
 
-- Idempotent `setupSystem()`：使用 `SPREADSHEET_ID` 指定的既有 Spreadsheet；未設定時才自動建立，並補齊 9 張 Sheet、Header、格式、設定與首次管理員。
+- Idempotent `setupSystem()`：初始化時自動識別綁定的試算表副本並保存 `SPREADSHEET_ID`；Web App 執行時以該 ID 開啟資料庫，並補齊 9 張 Sheet、Header、格式、設定與首次管理員。
 - 獨立 salt + SHA-256 + Script Property pepper 的密碼雜湊。
 - 24 小時預設 Session、活動時間更新、過期／停用失效、登出。
 - 管理員、導師、任課教師、行政的後端權限與班級範圍控制。
@@ -67,13 +67,11 @@ README.md
 
 1. 開啟[班級管理系統範本試算表](https://docs.google.com/spreadsheets/d/1MXMO_kBrVIkUWxEUE7ZrLiCgRx0ifMeZ-NIlDfgAN3A/edit?gid=0#gid=0)。
 2. 選擇 `檔案 → 建立副本`，後續只操作自己的副本，不要直接修改共用範本。
-3. 從副本網址 `/d/` 與 `/edit` 之間取得新的 Spreadsheet ID。
-4. 在副本選擇 `擴充功能 → Apps Script`，開啟隨副本建立的 Apps Script 專案。
-5. 在 `Apps Script → Project Settings → Script Properties` 將 `SPREADSHEET_ID` 設為步驟 3 的**副本 ID**，不可沿用範本 ID。
-6. 如需自訂首次管理員，先依下一節設定 `INITIAL_ADMIN_USERNAME`、`INITIAL_ADMIN_PASSWORD` 與 `INITIAL_ADMIN_NAME`。
-7. 在 Apps Script 編輯器選擇 `setupSystem()` 並執行，完成 Google 授權。
-8. 確認執行結果的 `spreadsheetId` 是自己的副本 ID，並記下首次回傳的 `adminUsername` 與 `temporaryPassword`。
-9. 依「部署 Web App」一節完成部署。
+3. 在副本選擇 `擴充功能 → Apps Script`，開啟隨副本建立的 Apps Script 專案。
+4. 如需自訂首次管理員，先依下一節設定 `INITIAL_ADMIN_USERNAME`、`INITIAL_ADMIN_PASSWORD` 與 `INITIAL_ADMIN_NAME`。
+5. 在 Apps Script 編輯器選擇 `setupSystem()` 並執行，完成 Google 授權。系統會自動識別目前綁定的副本並保存其 `SPREADSHEET_ID`。
+6. 確認執行結果的 `spreadsheetId` 與副本網址中的 ID 相同，並記下首次回傳的 `adminUsername` 與 `temporaryPassword`。
+7. 依「部署 Web App」一節完成部署。
 
 `setupSystem()` 可安全重跑；它會補齊缺少的 Sheet、Header 與設定，不會清除既有資料或重複建立管理員。
 

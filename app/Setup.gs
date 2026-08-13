@@ -1,19 +1,10 @@
 function setupSystem() {
   var result = withScriptLock_(function () {
     var props = getScriptProperties_();
+    var spreadsheet = resolveSetupSpreadsheet_(props);
+    var spreadsheetId = spreadsheet.getId();
     if (!props.getProperty('PASSWORD_PEPPER')) props.setProperty('PASSWORD_PEPPER', randomSecret_());
     if (!props.getProperty('SESSION_SECRET')) props.setProperty('SESSION_SECRET', randomSecret_());
-
-    var spreadsheet;
-    var spreadsheetId = props.getProperty('SPREADSHEET_ID');
-    if (!spreadsheetId) {
-      spreadsheet = SpreadsheetApp.create('班級管理系統資料庫');
-      spreadsheetId = spreadsheet.getId();
-      props.setProperty('SPREADSHEET_ID', spreadsheetId);
-    } else {
-      try { spreadsheet = SpreadsheetApp.openById(spreadsheetId); }
-      catch (e) { throw new Error('SPREADSHEET_ID 指向的試算表不存在或無權存取，請修正 Script Property 後再執行'); }
-    }
     try { spreadsheet.setSpreadsheetTimeZone(APP.TIMEZONE); } catch (ignore) {}
 
     var createdSheets = [];
@@ -47,6 +38,19 @@ function setupSystem() {
   });
   Logger.log(JSON.stringify(result));
   return result;
+}
+
+function resolveSetupSpreadsheet_(props) {
+  var spreadsheet = null;
+  try { spreadsheet = SpreadsheetApp.getActiveSpreadsheet(); } catch (ignore) {}
+  if (spreadsheet) {
+    props.setProperty('SPREADSHEET_ID', spreadsheet.getId());
+    return spreadsheet;
+  }
+  var spreadsheetId = props.getProperty('SPREADSHEET_ID');
+  if (!spreadsheetId) throw new Error('找不到綁定的試算表，請從試算表的「擴充功能 → Apps Script」開啟專案後執行 setupSystem()');
+  try { return SpreadsheetApp.openById(spreadsheetId); }
+  catch (e) { throw new Error('SPREADSHEET_ID 指向的試算表不存在或無權存取，請修正 Script Property 後再執行'); }
 }
 
 function ensureSheetSchema_(sheet, expectedHeaders) {

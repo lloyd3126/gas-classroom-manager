@@ -1,6 +1,6 @@
 # 驗收清單
 
-驗收日期：2026-08-13
+驗收日期：2026-08-14
 
 標記說明：
 
@@ -21,14 +21,16 @@
 
 - [x] 存在完整 `setupSystem()`。
 - [x] 缺少 `PASSWORD_PEPPER`、`SESSION_SECRET` 時自動產生至 Script Properties。
-- [x] 缺少 `SPREADSHEET_ID` 時使用 `SpreadsheetApp.create()` 建立資料庫。
+- [x] 從綁定試算表執行時，`setupSystem()` 使用 `getActiveSpreadsheet()` 取得副本並保存其 `SPREADSHEET_ID`。
+- [x] 無 Active Spreadsheet 時，可使用既有 `SPREADSHEET_ID` 以 `openById()` 開啟資料庫。
+- [x] Active Spreadsheet 與 `SPREADSHEET_ID` 都不存在時會明確失敗，不會意外建立另一份試算表。
 - [x] Schema 定義包含 9 張必要 Sheet 與指定 Header。
 - [x] 初始化只補缺少的 Sheet、Header、設定與管理員，不清除既有資料。
 - [x] Header freeze、加粗、背景、Filter、欄寬與基本日期／時間／Boolean 格式存在。
 - [x] 所有 Repository 寫入透過 Header Map，不以散落固定欄號處理業務欄位。
 - [x] ID 使用 UUID 與 STU／USR／CLS／RSN／SCR／ATT／LOG prefix。
 - [x] 完成後寫入 `SYSTEM_INITIALIZED=true`。
-- [ ] 在空白 GAS 專案第一次執行 `setupSystem()` 成功。
+- [ ] 從範本試算表副本的綁定 GAS 專案第一次執行 `setupSystem()` 成功，且回傳副本 ID。
 - [ ] 第二次執行確認無重複 Sheet、管理員、設定且原資料保留。
 - [ ] 實際檢視 9 張 Sheet 的格式與 Filter。
 

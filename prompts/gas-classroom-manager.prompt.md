@@ -9,8 +9,8 @@
 最終目標是：
 
 ```text
-建立新的 Google Apps Script 專案
-→ 貼入你產生的所有檔案
+建立範本 Google 試算表副本
+→ 從副本開啟綁定的 Google Apps Script 專案
 → 第一次執行 setupSystem()
 → 完成授權
 → Deploy as Web App
@@ -1367,21 +1367,31 @@ function setupSystem()
 
 第一次執行一次，就建立整套資料庫。
 
-如果沒有：
-
-```text
-SPREADSHEET_ID
-```
-
-自動：
+初始化時必須先嘗試：
 
 ```javascript
-SpreadsheetApp.create('班級管理系統資料庫')
+SpreadsheetApp.getActiveSpreadsheet()
 ```
 
-並把 Spreadsheet ID 存入 Script Properties。
+如果取得綁定的 Spreadsheet：
 
-不要求我自己建立 Spreadsheet。
+```text
+使用該 Spreadsheet
+把其 ID 寫入 Script Properties 的 SPREADSHEET_ID
+即使複製來的 Script Property 有舊 ID，也必須以目前綁定副本覆寫
+```
+
+如果沒有 Active Spreadsheet，但已存在 `SPREADSHEET_ID`，才使用：
+
+```javascript
+SpreadsheetApp.openById(spreadsheetId)
+```
+
+如果兩者都不存在，必須明確報錯並要求從試算表的 `擴充功能 → Apps Script` 執行；禁止另外建立一份 Spreadsheet。
+
+Web App 與 `google.script.run` 執行期間不得依賴 Active Spreadsheet，所有資料存取仍必須從 Script Properties 取得 `SPREADSHEET_ID` 並使用 `openById()`。
+
+不要求使用者手動設定 `SPREADSHEET_ID`。
 
 ---
 
@@ -2647,13 +2657,17 @@ SYSTEM_INITIALIZED=true
 ## 第一次安裝
 
 ```text
-1. 新建 Google Apps Script 專案
-2. 建立所有 .gs / .html
-3. 貼入程式碼
+純使用：
+1. 開啟範本 Google 試算表
+2. 建立自己的副本
+3. 從副本的「擴充功能 → Apps Script」開啟綁定專案
 4. 執行 setupSystem()
 5. 完成授權
-6. 取得 Spreadsheet URL
+6. 確認回傳的 Spreadsheet ID 是副本 ID
 7. 記下 admin 臨時密碼
+
+開發新功能：
+只有需要修改原始碼或使用 clasp / Agent 操作遠端專案時，才建立本機 .env 與 .clasp.json。
 ```
 
 指定管理員時：
@@ -2891,7 +2905,9 @@ Event listener 重複綁定
 ```text
 □ setupSystem() 第一次執行成功
 □ setupSystem() 可以安全重跑
-□ Spreadsheet 自動建立
+□ setupSystem() 自動識別綁定的 Spreadsheet 副本並保存 ID
+□ Web App 使用 openById()，不依賴 Active Spreadsheet
+□ 缺少 Active Spreadsheet 與 SPREADSHEET_ID 時不會意外另建 Spreadsheet
 □ 9 張 Sheet 全部建立
 □ Header 正確
 □ Script Properties 正確
@@ -3001,4 +3017,4 @@ Event listener 重複綁定
 
 最後交付必須達到：
 
-**複製完整程式 → 執行 setupSystem() → Deploy Web App → 可以直接使用。**
+**建立範本試算表副本 → 執行 setupSystem() → Deploy Web App → 可以直接使用。**
