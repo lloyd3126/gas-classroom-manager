@@ -1,0 +1,15 @@
+# Local Google Apps Script credentials and project binding
+.clasprc.json
+.clasp.json
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Node.js dependencies and logs
+node_modules/
+npm-debug.log*
+
+# macOS
+.DS_Store
