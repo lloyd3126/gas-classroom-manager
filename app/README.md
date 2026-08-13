@@ -5,7 +5,7 @@
 ## 安裝
 
 1. 從根目錄 README 提供的範本試算表建立自己的副本。
-2. 依根目錄 `.env.example` 建立 `.env`，只填入明確授權的試算表與綁定 Apps Script 專案；README 的範本連結本身不構成 Agent 操作授權。
+2. 依根目錄 `.env.example` 建立 `.env`，只填入明確授權的 `SPREADSHEET_ID` 與 `APPS_SCRIPT_ID`；README 的範本連結本身不構成 Agent 操作授權。
 3. 在副本選擇 `擴充功能 → Apps Script`；若副本未包含程式檔，建立本資料夾列出的所有 `.gs` 與 `.html` 檔。
 4. 顯示並以此處的 `appsscript.json` 取代專案 manifest。
 5. 將副本的 Spreadsheet ID 設為 Apps Script 的 `SPREADSHEET_ID` Script Property，不可沿用範本 ID。

@@ -26,12 +26,12 @@ The spreadsheet linked in `README.md` is a distribution template for a human to 
 
 `.env` is the only source of authorization for remote Google targets. `.env.example` defines the fields but does not authorize any target. Before remote operations:
 
-- For browser or connector access, require non-empty `SPREADSHEET_ID` and `SPREADSHEET_URL` in `.env`, verify that the URL contains that exact ID, and operate only that URL.
+- For browser or connector access to Sheets, require a non-empty `SPREADSHEET_ID` in `.env` and operate only that spreadsheet. When a URL is needed, derive it as `https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit`.
 - For any `clasp` command that contacts Google, require non-empty `APPS_SCRIPT_ID` in `.env` and verify that it exactly matches `scriptId` in the local ignored `.clasp.json`.
-- For browser access to Apps Script, use only `APPS_SCRIPT_URL` from `.env` and verify that it contains the exact `APPS_SCRIPT_ID`.
+- For browser access to Apps Script, require a non-empty `APPS_SCRIPT_ID` in `.env` and derive the URL as `https://script.google.com/home/projects/<APPS_SCRIPT_ID>/edit`.
 - If `.env` is missing, a required value is empty, or any ID does not match, stop and ask the user to identify their own copied spreadsheet or Apps Script project. Do not infer a target from README, Git history, prompts, or other files.
 
-Never commit `.env`, `.clasp.json`, `.clasprc.json`, credentials, deployment URLs, or Script Properties. Keep `.env.example` empty of real IDs and URLs.
+Never commit `.env`, `.clasp.json`, `.clasprc.json`, credentials, deployment URLs, or Script Properties. Keep `.env.example` empty of real IDs.
 
 ## Coding Style & Naming Conventions
 
