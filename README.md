@@ -41,6 +41,7 @@ app/
   appsscript.json                   # V8、時區與 Web App manifest
 
 ACCEPTANCE.md                       # 靜態／實機驗收清單
+.env.example                       # Agent 遠端操作目標的本機設定範例
 README.md
 ```
 
@@ -63,12 +64,14 @@ README.md
 1. 開啟[班級管理系統範本試算表](https://docs.google.com/spreadsheets/d/1MXMO_kBrVIkUWxEUE7ZrLiCgRx0ifMeZ-NIlDfgAN3A/edit?gid=0#gid=0)。
 2. 選擇 `檔案 → 建立副本`，後續只操作自己的副本，不要直接修改共用範本。
 3. 從副本網址 `/d/` 與 `/edit` 之間取得新的 Spreadsheet ID。
-4. 在副本選擇 `擴充功能 → Apps Script`，開啟與副本綁定的 Apps Script 專案；若副本未包含程式檔，再將 `app/` 內所有 `.gs` 與 `.html` 檔案建立於專案中。
-5. 在 Apps Script 專案設定中顯示 `appsscript.json`，確認內容與 `app/appsscript.json` 相同。
-6. 在 `Apps Script → Project Settings → Script Properties` 將 `SPREADSHEET_ID` 設為步驟 3 的**副本 ID**，不可沿用範本 ID。首次執行前必須完成，否則系統可能連到錯誤的試算表或另外建立一份。
-7. 如需自訂首次管理員，先依下一節設定 `INITIAL_ADMIN_USERNAME`、`INITIAL_ADMIN_PASSWORD` 與 `INITIAL_ADMIN_NAME`。
-8. 在 Apps Script 編輯器選擇 `setupSystem()` 並執行，完成 Google 授權。
-9. 確認執行結果的 `spreadsheetId` 是自己的副本 ID，並記下首次回傳的 `adminUsername` 與 `temporaryPassword`。
+4. 執行 `cp .env.example .env`，把自己的副本 ID 與網址填入 `SPREADSHEET_ID`、`SPREADSHEET_URL`。README 中的範本連結本身不授權 Agent 操作；只有本機 `.env` 明列的目標可以使用瀏覽器或連接器操作。
+5. 在副本選擇 `擴充功能 → Apps Script`，開啟與副本綁定的 Apps Script 專案；若副本未包含程式檔，再將 `app/` 內所有 `.gs` 與 `.html` 檔案建立於專案中。
+6. 從 Apps Script 專案設定取得 Script ID，填入 `.env` 的 `APPS_SCRIPT_ID` 與 `APPS_SCRIPT_URL`。Agent 只會在 `.env` 與 `.clasp.json` 的 Script ID 完全相符時執行遠端 `clasp` 指令。
+7. 在 Apps Script 專案設定中顯示 `appsscript.json`，確認內容與 `app/appsscript.json` 相同。
+8. 在 `Apps Script → Project Settings → Script Properties` 將 `SPREADSHEET_ID` 設為步驟 3 的**副本 ID**，不可沿用範本 ID。首次執行前必須完成，否則系統可能連到錯誤的試算表或另外建立一份。
+9. 如需自訂首次管理員，先依下一節設定 `INITIAL_ADMIN_USERNAME`、`INITIAL_ADMIN_PASSWORD` 與 `INITIAL_ADMIN_NAME`。
+10. 在 Apps Script 編輯器選擇 `setupSystem()` 並執行，完成 Google 授權。
+11. 確認執行結果的 `spreadsheetId` 是自己的副本 ID，並記下首次回傳的 `adminUsername` 與 `temporaryPassword`。
 
 `setupSystem()` 可安全重跑；它會補齊缺少的 Sheet、Header 與設定，不會清除既有資料或重複建立管理員。
 

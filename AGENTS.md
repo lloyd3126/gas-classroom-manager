@@ -20,6 +20,19 @@ git diff --check                # detect whitespace errors
 
 Treat `clasp pull` as destructive to local source: commit or inspect the working tree first.
 
+## Remote Target Safety
+
+The spreadsheet linked in `README.md` is a distribution template for a human to copy. That README link alone is never authorization to open, inspect, edit, or otherwise operate the spreadsheet through an automated browser, Google Sheets connector, `clasp`, or Apps Script API. An Agent may operate it only when the exact target is also explicitly present in the local `.env`.
+
+`.env` is the only source of authorization for remote Google targets. `.env.example` defines the fields but does not authorize any target. Before remote operations:
+
+- For browser or connector access, require non-empty `SPREADSHEET_ID` and `SPREADSHEET_URL` in `.env`, verify that the URL contains that exact ID, and operate only that URL.
+- For any `clasp` command that contacts Google, require non-empty `APPS_SCRIPT_ID` in `.env` and verify that it exactly matches `scriptId` in the local ignored `.clasp.json`.
+- For browser access to Apps Script, use only `APPS_SCRIPT_URL` from `.env` and verify that it contains the exact `APPS_SCRIPT_ID`.
+- If `.env` is missing, a required value is empty, or any ID does not match, stop and ask the user to identify their own copied spreadsheet or Apps Script project. Do not infer a target from README, Git history, prompts, or other files.
+
+Never commit `.env`, `.clasp.json`, `.clasprc.json`, credentials, deployment URLs, or Script Properties. Keep `.env.example` empty of real IDs and URLs.
+
 ## Coding Style & Naming Conventions
 
 Use two-space indentation in `.gs` files and preserve the compact style already used in `Scripts.html`. Prefer `var` and ES5-compatible server patterns where existing GAS code does; browser code may use modern JavaScript supported by the current frontend. Public GAS functions use `camelCase`; internal helpers end with `_`, such as `requireSession_`. Constants use uppercase names. Keep Sheet headers and user-facing copy in Traditional Chinese. Add behavior to the existing responsibility-based module instead of creating broad utility abstractions.
