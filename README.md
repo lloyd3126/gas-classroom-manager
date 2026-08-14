@@ -41,7 +41,7 @@ app/
   appsscript.json                   # V8、時區與 Web App manifest
 
 ACCEPTANCE.md                       # 靜態／實機驗收清單
-AGENT_TESTING.example.md            # Agent 全功能實測流程與進度範本
+AGENT_TESTING.example.md            # Agent 使用者端全功能實測流程與進度範本
 .env.example                       # Agent 遠端操作目標的本機設定範例
 README.md
 ```

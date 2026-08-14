@@ -35,7 +35,7 @@ Never commit `.env`, `.clasp.json`, `.clasprc.json`, credentials, deployment URL
 
 ## Agent-operated Test Ledger
 
-`AGENT_TESTING.md` is the required local source of truth for browser-driven, Google Sheets, Apps Script, deployment, `clasp`, and Web App testing. It is ignored by Git because it may contain target IDs, deployment URLs, test account references, progress, and evidence. `AGENT_TESTING.example.md` is the committed workflow template.
+`AGENT_TESTING.md` is the required local source of truth for user-facing browser, Google Sheets, Apps Script initialization, deployment, and Web App testing. It intentionally excludes source development, Git, Node.js, and `clasp` synchronization checks. It is ignored by Git because it may contain target IDs, deployment URLs, test account references, progress, and evidence. `AGENT_TESTING.example.md` is the committed workflow template.
 
 - Before the first operation after a spreadsheet copy exists, create `AGENT_TESTING.md` from the example if it is missing, then fill its run metadata from the authorized local environment.
 - Before every Agent-operated remote or browser action, read `AGENT_TESTING.md`, resume from its first relevant unchecked item, and review unresolved blockers.
