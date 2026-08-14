@@ -33,6 +33,19 @@ The spreadsheet linked in `README.md` is a distribution template for a human to 
 
 Never commit `.env`, `.clasp.json`, `.clasprc.json`, credentials, deployment URLs, or Script Properties. Keep `.env.example` empty of real IDs.
 
+## Agent-operated Test Ledger
+
+`AGENT_TESTING.md` is the required local source of truth for browser-driven, Google Sheets, Apps Script, deployment, `clasp`, and Web App testing. It is ignored by Git because it may contain target IDs, deployment URLs, test account references, progress, and evidence. `AGENT_TESTING.example.md` is the committed workflow template.
+
+- Before the first operation after a spreadsheet copy exists, create `AGENT_TESTING.md` from the example if it is missing, then fill its run metadata from the authorized local environment.
+- Before every Agent-operated remote or browser action, read `AGENT_TESTING.md`, resume from its first relevant unchecked item, and review unresolved blockers.
+- Immediately after every attempted action, update the matching checkbox, current progress, timestamp, operation log, and any blocker or defect. Record failed attempts as well as successful ones; do not rely on conversation history as the test record.
+- Mark `[x]` only after observing the expected result in the real interface or remote system. Keep blocked or failed items unchecked and attach evidence or reproduction details.
+- When product behavior or test scope changes, update `AGENT_TESTING.example.md` and merge the same checklist change into the local ledger without resetting completed progress.
+- At the end of a run, synchronize evidence-backed results to `ACCEPTANCE.md`, update the ledger's final summary, and leave an explicit next step.
+
+The ledger does not broaden authorization. Continue to follow `.env` target restrictions and obtain user authority for deployment, writes, destructive cleanup, account changes, or other external mutations.
+
 ## Coding Style & Naming Conventions
 
 Use two-space indentation in `.gs` files and preserve the compact style already used in `Scripts.html`. Prefer `var` and ES5-compatible server patterns where existing GAS code does; browser code may use modern JavaScript supported by the current frontend. Public GAS functions use `camelCase`; internal helpers end with `_`, such as `requireSession_`. Constants use uppercase names. Keep Sheet headers and user-facing copy in Traditional Chinese. Add behavior to the existing responsibility-based module instead of creating broad utility abstractions.
